@@ -3,6 +3,7 @@ package com.msu.cmc.musicplayer
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class TracklistAdapter(private val dataSet: ArrayList<TrackItem>, private val context: Context): RecyclerView.Adapter<TracklistAdapter.ViewHolder>() {
+class TracklistAdapter(private val dataSet: ArrayList<TrackItem>, private val context: Context, private val onClickAction: IOnGalleryItemClicked): RecyclerView.Adapter<TracklistAdapter.ViewHolder>() {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val title: TextView
         val icon: ImageView
@@ -39,10 +40,8 @@ class TracklistAdapter(private val dataSet: ArrayList<TrackItem>, private val co
         holder.itemView.setOnClickListener{
                 Player.getInstance()!!.reset()
                 Player.currentIndex = position
-                val intent = Intent(context,PlayerActivity::class.java)
-                intent.putExtra("LIST",dataSet)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(intent)
+
+                onClickAction.onGalleryItemClicked()
         }
     }
 

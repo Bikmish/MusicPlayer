@@ -6,29 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/title_text"
-        android:text="Tracklist"
-        android:textColor="@color/purple_500"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:padding="10dp"
-        android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No tracks :("
-        android:id="@+id/notracks_text"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycler_view"
-        android:layout_below="@+id/title_text"/>
+        android:layout_height="match_parent"
+        android:id="@+id/fmt_tracklist"
+        android:name="com.msu.cmc.musicplayer.FragmentTrackList"/>
 
 </RelativeLayout>

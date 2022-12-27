@@ -1,20 +1,24 @@
 package com.msu.cmc.musicplayer
 
+import android.database.Cursor
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import java.io.File
 import java.util.concurrent.TimeUnit
 
-class PlayerActivity : AppCompatActivity() {
+
+
+class FragmentPlayer: Fragment(R.layout.fragment_player) {
     var titleTv: TextView? = null
-    var currentTimeTv:TextView? = null
-    var totalTimeTv:TextView? = null
+    var currentTimeTv: TextView? = null
+    var totalTimeTv: TextView? = null
     var seekBar: SeekBar? = null
     var pausePlay: ImageView? = null
     var nextBtn: ImageView? = null
@@ -25,24 +29,40 @@ class PlayerActivity : AppCompatActivity() {
     var mediaPlayer: MediaPlayer? = Player.getInstance()
     var angle = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        titleTv = findViewById(R.id.song_title);
-        currentTimeTv = findViewById(R.id.current_time);
-        totalTimeTv = findViewById(R.id.total_time);
-        seekBar = findViewById(R.id.seek_bar);
-        pausePlay = findViewById(R.id.pause_play);
-        nextBtn = findViewById(R.id.next);
-        previousBtn = findViewById(R.id.previous);
-        musicIcon = findViewById(R.id.music_icon_big);
-        trackList = intent.getSerializableExtra("LIST") as ArrayList<TrackItem>
+        titleTv = view.findViewById(R.id.song_title);
+        currentTimeTv = view.findViewById(R.id.current_time);
+        totalTimeTv = view.findViewById(R.id.total_time);
+        seekBar = view.findViewById(R.id.seek_bar);
+        pausePlay = view.findViewById(R.id.pause_play);
+        nextBtn = view.findViewById(R.id.next);
+        previousBtn = view.findViewById(R.id.previous);
+        musicIcon = view.findViewById(R.id.music_icon_big);
+        trackList = ArrayList()
         titleTv!!.setSelected(true);
+
+        parentFragmentManager.setFragmentResultListener("result", this){_, bundle ->
+            trackList = bundle.getSerializable("LIST") as ArrayList<TrackItem>
+        }
+
+        val columns = arrayOf(
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.DURATION
+        )
+        val conditions = MediaStore.Audio.Media.IS_MUSIC + " != 0"
+        val resolver = requireActivity().contentResolver
+        val cursor: Cursor? = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns, conditions, null, null)
+        while (cursor!!.moveToNext()) {
+            val trackData = TrackItem(cursor.getString(0), cursor.getString(1), cursor.getString(2))
+            if (File(trackData.path!!).exists()) trackList.add(trackData)
+        }
 
         initPlayer()
 
-        this@PlayerActivity.runOnUiThread(object : Runnable {
+        requireActivity().runOnUiThread(object : Runnable {
             override fun run() {
                 if (mediaPlayer != null) {
                     seekBar!!.setProgress(mediaPlayer!!.currentPosition)
@@ -59,7 +79,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         })
 
-        seekBar!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        seekBar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (mediaPlayer != null && fromUser) {
                     mediaPlayer!!.seekTo(progress)
@@ -69,7 +89,6 @@ class PlayerActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-
     }
 
     fun initPlayer() {
@@ -122,5 +141,5 @@ class PlayerActivity : AppCompatActivity() {
     private fun pausePlay() {
         if (mediaPlayer!!.isPlaying) mediaPlayer!!.pause() else mediaPlayer!!.start()
     }
-
 }
+
