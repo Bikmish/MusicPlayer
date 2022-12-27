@@ -1,4 +1,4 @@
-package com.msu.cmc.musicplayer
+package com.msu.cmc.musicplayer.presentation.list
 
 interface IOnGalleryItemClicked {
     fun onGalleryItemClicked()

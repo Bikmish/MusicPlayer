@@ -1,4 +1,4 @@
-package com.msu.cmc.musicplayer
+package com.msu.cmc.musicplayer.presentation.list
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -13,6 +13,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.msu.cmc.musicplayer.presentation.player.FragmentPlayer
+import com.msu.cmc.musicplayer.R
+import com.msu.cmc.musicplayer.models.TrackItem
+import com.msu.cmc.musicplayer.presentation.list.adapters.TracklistAdapter
 import java.io.File
 
 class FragmentTrackList: Fragment(R.layout.fragment_track_list), IOnGalleryItemClicked {

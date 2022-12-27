@@ -1,15 +1,17 @@
-package com.msu.cmc.musicplayer
+package com.msu.cmc.musicplayer.presentation.list.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.msu.cmc.musicplayer.models.Player
+import com.msu.cmc.musicplayer.R
+import com.msu.cmc.musicplayer.models.TrackItem
+import com.msu.cmc.musicplayer.presentation.list.IOnGalleryItemClicked
 
 
 class TracklistAdapter(private val dataSet: ArrayList<TrackItem>, private val context: Context, private val onClickAction: IOnGalleryItemClicked): RecyclerView.Adapter<TracklistAdapter.ViewHolder>() {
@@ -31,7 +33,7 @@ class TracklistAdapter(private val dataSet: ArrayList<TrackItem>, private val co
         val trackData: TrackItem = dataSet.get(position)
         holder.title.setText(trackData.title)
 
-        if(Player.currentIndex==position){
+        if(Player.currentIndex ==position){
             holder.title.setTextColor(Color.parseColor("#1550F5"));
         }else{
             holder.title.setTextColor(Color.parseColor("#000000"));

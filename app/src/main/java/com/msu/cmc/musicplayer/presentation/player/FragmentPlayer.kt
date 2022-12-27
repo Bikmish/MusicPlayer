@@ -1,4 +1,4 @@
-package com.msu.cmc.musicplayer
+package com.msu.cmc.musicplayer.presentation.player
 
 import android.database.Cursor
 import android.media.MediaPlayer
@@ -10,6 +10,9 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.msu.cmc.musicplayer.models.Player
+import com.msu.cmc.musicplayer.R
+import com.msu.cmc.musicplayer.models.TrackItem
 import java.io.File
 import java.util.concurrent.TimeUnit
 

@@ -1,4 +1,4 @@
-package com.msu.cmc.musicplayer
+package com.msu.cmc.musicplayer.models
 
 import android.media.MediaPlayer
 
